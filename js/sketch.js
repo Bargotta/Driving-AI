@@ -103,7 +103,7 @@ function draw() {
     if (! USER_IS_PLAYING) {
         textSize(17);
         fill(255);
-        text("generation: " + generation, 10, 25);
+        text("Generation: " + generation, 10, 25);
         text("Alive: " + cars.length + "/" + TOTAL, 10, 52);
         text("Speed: x" + speedSlider.value(), 10, 77);
     }

@@ -42,7 +42,7 @@ class Car {
 		push();
 		translate(this.x, this.y);
 		rotate(this.angle);
-		fill(255);
+		fill(255, 50);
 		rect(-this.w / 2, -this.h / 2, this.w, this.h);
 		pop();
 	}
