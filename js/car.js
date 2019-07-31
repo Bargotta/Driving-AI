@@ -9,8 +9,9 @@ class Car {
 		this.sensorMag = sensorMag;
 		this.angle = 0; // angle of car from north
 		this.dead = false;
-		this.sensors = [];
+		this.fitness = 0;
 
+		this.sensors = [];
 		this.createSensors();
 	}
 
@@ -60,6 +61,24 @@ class Car {
 				this.dead = true;
 				return;
 			}
+		}
+	}
+
+	updateFitness(track) {
+		let p1 = track.innerPoints[this.fitness];
+		let p2 = track.outerPoints[this.fitness];
+		let checkpoint = collideLineRect(
+			p1.x,
+			p1.y,
+			p2.x,
+			p2.y,
+			this.x - this.w / 2,
+			this.y - this.h / 2,
+			this.w,
+			this.h
+		);
+		if (checkpoint) {
+			this.fitness++;
 		}
 	}
 

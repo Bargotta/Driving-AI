@@ -45,6 +45,7 @@ function draw() {
 
     car.detectCollision(track);
     car.lookAt(track);
+    car.updateFitness(track);
 
     background(0);
     track.show();
