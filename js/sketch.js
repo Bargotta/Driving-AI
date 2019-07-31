@@ -5,6 +5,9 @@ const CAR_TURN_SPEED = 0.07;
 const CAR_SPEED = 2.5;
 const CAR_WIDTH = 10;
 const CAR_LENGTH = 20;
+const CAR_SENSOR_MAG = 50;
+
+const DEBUG = true;
 
 let car;
 let track;
@@ -17,7 +20,8 @@ function setup() {
         CAR_WIDTH,
         CAR_LENGTH,
         CAR_TURN_SPEED,
-        CAR_SPEED
+        CAR_SPEED,
+        CAR_SENSOR_MAG
     );
     calculateStartAngle();
 }
@@ -25,7 +29,7 @@ function setup() {
 function calculateStartAngle() {
     let north = createVector(0, -1);
     let firstTrackSegment = p5.Vector.sub(track.innerPoints[1], track.innerPoints[0]);
-    car.angle = firstTrackSegment.angleBetween(north);
+    car.updateAngle(firstTrackSegment.angleBetween(north));
 }
 
 function draw() {
@@ -44,9 +48,12 @@ function draw() {
     background(0);
     car.show();
     track.show();
-    track.debug();
+    if (DEBUG) {
+        track.debug();
+        car.debug();
+    }
 
     if (car.dead) {
-        noloop();
+        noLoop();
     }
 }
