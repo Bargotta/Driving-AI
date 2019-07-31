@@ -1,5 +1,5 @@
 class Car {
-	constructor(x, y, w, h, turnSpeed, maxSpeed, sensorMag) {
+	constructor(x, y, w, h, turnSpeed, maxSpeed, sensorMag, driver) {
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -8,11 +8,18 @@ class Car {
 		this.maxSpeed = maxSpeed;
 		this.sensorMag = sensorMag;
 		this.angle = 0; // angle of car from north
-		this.dead = false;
+		this.crashed = false;
+		this.fuel = CAR_FUEL;
 		this.fitness = 0;
 
 		this.sensors = [];
 		this.createSensors();
+
+		if (driver) {
+			this.driver = driver.copy();
+		} else {
+			this.driver = new NeuralNetwork(7, 7, 3);
+		}
 	}
 
 	createSensors() {
@@ -23,6 +30,14 @@ class Car {
 		}
 	}
 
+	dispose() {
+		this.driver.dispose();
+	}
+
+	mutate() {
+		this.driver.mutate(MUTATION_RATE);
+	} 
+
 	show() {
 		push();
 		translate(this.x, this.y);
@@ -30,6 +45,25 @@ class Car {
 		fill(255);
 		rect(-this.w / 2, -this.h / 2, this.w, this.h);
 		pop();
+	}
+
+	drive() {
+		if (this.fuel <= 0) {
+			this.crashed = true;
+		}
+
+		let inputs = [];
+		for (let s of this.sensors) {
+			inputs.push(s.distRatio());
+		}
+		let output = this.driver.predict(inputs);
+		if (output[0] > output[1] && output[0] > output[2]) {
+			this.turnLeft();
+		} else if (output[1] > output[0] && output[1] > output[2]) {
+			this.turnRight();
+		}
+
+		this.fuel--;
 	}
 
 	debug() {
@@ -58,7 +92,7 @@ class Car {
 				this.h
 			);
 			if (collision) {
-				this.dead = true;
+				this.crashed = true;
 				return;
 			}
 		}
@@ -79,10 +113,11 @@ class Car {
 		);
 		if (checkpoint) {
 			this.fitness++;
+			this.fuel = CAR_FUEL;
 		}
 	}
 
-	drive() {
+	gas() {
 		this.x += this.maxSpeed * sin(this.angle);
 		this.y -= this.maxSpeed * cos(this.angle);
 		this.updateSensors();

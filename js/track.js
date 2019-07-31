@@ -13,7 +13,7 @@ class Track {
 
 	generateTrack() {
 		for (let angle = 0; angle < TWO_PI; angle += TWO_PI / this.segments) {
-			let offsetX = 160 + 150 * noise(angle);
+			let offsetX = 150 + 210 * noise(angle);
 			let offsetY = 100 + 130 * noise(angle);
 			let xOut = offsetX * sin(angle) + width / 2;
 			let yOut = offsetY * cos(angle) + height / 2;
