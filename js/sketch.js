@@ -39,8 +39,14 @@ function draw() {
         car.turnRight();
     }
 
+    car.detectCollision(track);
+
     background(0);
     car.show();
     track.show();
     track.debug();
+
+    if (car.dead) {
+        noloop();
+    }
 }
