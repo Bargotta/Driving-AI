@@ -37,6 +37,12 @@ class Car {
 		}
 	}
 
+	lookAt(track) {
+		for (let s of this.sensors) {
+			s.locate(track);
+		}
+	}
+
 	detectCollision(track) {
 		for (let b of track.boundaries) {
 			// TODO: Take into account the car rotation when detecting collision

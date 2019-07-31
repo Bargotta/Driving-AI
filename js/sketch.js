@@ -44,10 +44,11 @@ function draw() {
     }
 
     car.detectCollision(track);
+    car.lookAt(track);
 
     background(0);
-    car.show();
     track.show();
+    car.show();
     if (DEBUG) {
         track.debug();
         car.debug();
